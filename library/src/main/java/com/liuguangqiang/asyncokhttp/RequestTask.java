@@ -28,8 +28,6 @@ import java.io.IOException;
  */
 public class RequestTask implements Runnable {
 
-    private final String TAG = "RequestTask";
-
     private BaseResponseHandler mResponseHandler;
 
     @Override
@@ -50,14 +48,23 @@ public class RequestTask implements Runnable {
     public void execute() {
         try {
             Response response = mClient.newCall(mRequest).execute();
-            String responseString = response.body().string();
             int code = response.code();
+            String responseString = "without response body";
+            if (response.body() != null)
+                response.body().string();
 
-            if (response.isSuccessful()) {
+            if (response.isSuccessful())
                 mResponseHandler.sendSuccess(code, responseString);
-            }
+            else
+                mResponseHandler.sendFailure(code, responseString);
         } catch (IOException e) {
-            e.printStackTrace();
+            String error = "unknown";
+            if (e.getMessage() != null) error = e.getMessage();
+
+            if (error.equals("Canceled"))
+                mResponseHandler.sendCancel();
+            else
+                mResponseHandler.sendFailure(0, error);
         }
     }
 
