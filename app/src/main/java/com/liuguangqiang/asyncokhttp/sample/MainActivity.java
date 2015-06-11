@@ -2,38 +2,65 @@ package com.liuguangqiang.asyncokhttp.sample;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
+import android.util.Log;
 
-import com.liuguangqiang.asyncokhttp.R;
+import com.liuguangqiang.asyncokhttp.AsyncOkHttp;
+import com.liuguangqiang.asyncokhttp.RequestParams;
+import com.liuguangqiang.asyncokhttp.BaseResponseHandler;
+import com.liuguangqiang.asyncokhttp.JsonResponseHandler;
+import com.liuguangqiang.asyncokhttp.sample.entity.TestEntity;
 
 public class MainActivity extends AppCompatActivity {
+
+    private static final String TAG = "AsyncOkHttp";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        get();
+        put();
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
+    public void get() {
+        String url = "http://news-at.zhihu.com/api/4/news/latest";
+
+        AsyncOkHttp.getInstance().get(url, new JsonResponseHandler<TestEntity>(TestEntity.class) {
+
+            @Override
+            public void onSuccess(TestEntity result) {
+                if (result != null) {
+                    Log.i(TAG, "date:" + result.date);
+                }
+            }
+
+            @Override
+            public void onFailure(int code, String responseString) {
+                Log.i(TAG, "onFailure:" + responseString);
+            }
+        });
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
+    public void put() {
+        String url = "http://staging.api.fishsaying.com/authenticates.json";
+        RequestParams params = new RequestParams();
+        params.put("authorize", "eric");
+        params.put("password", "yushuo@2013");
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
+        AsyncOkHttp.getInstance().put(url, params, new BaseResponseHandler() {
+            @Override
+            public void onSuccess(int code, String responseString) {
+                Log.i(TAG, "onSuccess-code:" + code);
+                Log.i(TAG, "onSuccess:" + responseString);
+            }
 
-        return super.onOptionsItemSelected(item);
+            @Override
+            public void onFailure(int code, String responseString) {
+                Log.i(TAG, "onFailure-code:" + code);
+                Log.i(TAG, "onFailure:" + responseString);
+            }
+        });
     }
+
 }
