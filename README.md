@@ -14,7 +14,7 @@ OkHttp is an HTTP client that’s efficient by default:
 * Asynchronous HTTP requests.
 * Perform HTTP requests with OkHttp.
 * Parse json string with Gson or LoganSquare.
-* Optional or custom json engine.
+* Optional or customize json engine.
 
 ##Examples
 ### Get
