@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.liuguangqiang.asyncokhttp.handler;
+package com.liuguangqiang.asyncokhttp;
 
 import android.os.Handler;
 import android.os.Message;

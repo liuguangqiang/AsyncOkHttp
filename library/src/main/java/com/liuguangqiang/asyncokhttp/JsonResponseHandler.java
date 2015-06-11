@@ -14,9 +14,8 @@
  * limitations under the License.
  */
 
-package com.liuguangqiang.asyncokhttp.handler;
+package com.liuguangqiang.asyncokhttp;
 
-import com.liuguangqiang.asyncokhttp.AsyncOkHttp;
 import com.liuguangqiang.asyncokhttp.json.BaseJsonEngine;
 
 /**
@@ -27,14 +26,19 @@ public class JsonResponseHandler<T> extends BaseResponseHandler {
 
     private Class<T> cls;
 
-    private BaseJsonEngine jsonEngine;
+    private BaseJsonEngine mJsonEngine;
 
     private JsonResponseHandler() {
     }
 
     public JsonResponseHandler(Class<T> jsonObjectClass) {
         cls = jsonObjectClass;
-        jsonEngine = AsyncOkHttp.getInstance().getConfiguration().getJsonEngine();
+        mJsonEngine = AsyncOkHttp.getInstance().getConfiguration().getJsonEngine();
+    }
+
+    public JsonResponseHandler(Class<T> jsonObjectClass, BaseJsonEngine jsonEngine) {
+        cls = jsonObjectClass;
+        mJsonEngine = jsonEngine;
     }
 
     @Override
@@ -52,7 +56,7 @@ public class JsonResponseHandler<T> extends BaseResponseHandler {
     }
 
     public T parse(String json) {
-        return jsonEngine.parse(json, cls);
+        return mJsonEngine.parse(json, cls);
     }
 
 }

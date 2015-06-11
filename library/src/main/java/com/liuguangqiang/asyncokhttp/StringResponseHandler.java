@@ -1,4 +1,4 @@
-package com.liuguangqiang.asyncokhttp.handler;
+package com.liuguangqiang.asyncokhttp;
 
 /**
  * Created by Eric on 15/6/10.
