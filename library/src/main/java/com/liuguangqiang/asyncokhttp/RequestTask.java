@@ -51,7 +51,7 @@ public class RequestTask implements Runnable {
             int code = response.code();
             String responseString = "without response body";
             if (response.body() != null)
-                response.body().string();
+                responseString = response.body().string();
 
             if (response.isSuccessful())
                 mResponseHandler.sendSuccess(code, responseString);
