@@ -14,13 +14,18 @@
  * limitations under the License.
  */
 
-package com.liuguangqiang.asyncokhttp.parse;
+package com.liuguangqiang.asyncokhttp.json;
+
+import com.google.gson.Gson;
 
 /**
  * Created by Eric on 15/6/11.
  */
-public abstract class BaseJsonEngine {
+public class GsonEngine extends BaseJsonEngine {
 
-    public abstract <T> T parse(String json, Class<?> cls);
+    @Override
+    public <T> T parse(String json, Class<?> cls) {
+        return (T) new Gson().fromJson(json, cls);
+    }
 
 }

@@ -14,18 +14,25 @@
  * limitations under the License.
  */
 
-package com.liuguangqiang.asyncokhttp.parse;
+package com.liuguangqiang.asyncokhttp.json;
 
-import com.google.gson.Gson;
+import java.io.IOException;
+
+import com.bluelinelabs.logansquare.LoganSquare;
 
 /**
  * Created by Eric on 15/6/11.
  */
-public class GsonEngine extends BaseJsonEngine {
+public class LoganSquareEngine extends BaseJsonEngine {
 
     @Override
     public <T> T parse(String json, Class<?> cls) {
-        return (T) new Gson().fromJson(json, cls);
+        try {
+            return (T) LoganSquare.parse(json, cls);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
 }

@@ -14,25 +14,13 @@
  * limitations under the License.
  */
 
-package com.liuguangqiang.asyncokhttp.parse;
-
-import java.io.IOException;
-
-import com.bluelinelabs.logansquare.LoganSquare;
+package com.liuguangqiang.asyncokhttp.json;
 
 /**
  * Created by Eric on 15/6/11.
  */
-public class LoganSquareEngine extends BaseJsonEngine {
+public abstract class BaseJsonEngine {
 
-    @Override
-    public <T> T parse(String json, Class<?> cls) {
-        try {
-            return (T) LoganSquare.parse(json, cls);
-        } catch (IOException e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
+    public abstract <T> T parse(String json, Class<?> cls);
 
 }
