@@ -28,11 +28,9 @@ public abstract class BaseResponseHandler {
 
     private static final int SUCCESS = 1;
 
-    private static final int FINISH = 2;
+    private static final int FAILURE = 2;
 
-    private static final int FAILURE = 3;
-
-    private static final int CANCLE = 4;
+    private static final int CANCEL = 3;
 
     public void sendStart() {
         sendMessage(START);
@@ -46,8 +44,8 @@ public abstract class BaseResponseHandler {
         sentMessage(FAILURE, code, responseString);
     }
 
-    public void sendFinished() {
-        sendMessage(FINISH);
+    public void sendCancel() {
+        sendMessage(CANCEL);
     }
 
     public void sendMessage(int what) {
@@ -77,13 +75,32 @@ public abstract class BaseResponseHandler {
                     break;
                 case SUCCESS:
                     onSuccess(msg.arg1, msg.obj.toString());
+                    onFinish();
+                    break;
+                case FAILURE:
+                    onFailure(msg.arg1, msg.obj.toString());
+                    onFinish();
+                    break;
+                case CANCEL:
+                    onCancel();
+                    onFinish();
                     break;
             }
         }
     };
 
-    protected abstract void onStart();
+    public void onStart() {
+    }
 
-    protected abstract void onSuccess(int code, String result);
+    public void onFinish() {
+    }
+
+    public void onCancel() {
+    }
+
+    public void onFailure(int code, String responseString) {
+    }
+
+    public abstract void onSuccess(int code, String responseString);
 
 }

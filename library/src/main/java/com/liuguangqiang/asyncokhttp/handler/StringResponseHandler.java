@@ -6,12 +6,7 @@ package com.liuguangqiang.asyncokhttp.handler;
 public class StringResponseHandler extends BaseResponseHandler {
 
     @Override
-    protected void onStart() {
-
+    public void onSuccess(int code, String result) {
     }
 
-    @Override
-    protected void onSuccess(int code, String result) {
-
-    }
 }
