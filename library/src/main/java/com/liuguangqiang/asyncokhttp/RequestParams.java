@@ -16,12 +16,82 @@
 
 package com.liuguangqiang.asyncokhttp;
 
+import android.text.TextUtils;
+
+import com.squareup.okhttp.FormEncodingBuilder;
+import com.squareup.okhttp.RequestBody;
+
+import java.util.HashMap;
+
 /**
  * Created by Eric on 15/6/10.
  */
 public class RequestParams {
 
+    private String tag;
+
+    private final HashMap<String, String> params;
+
+    public RequestParams() {
+        params = new HashMap<>();
+    }
+
+    public String getTag() {
+        return tag;
+    }
+
+    public void setTag(String tag) {
+        this.tag = tag;
+    }
+
     public void put(String key, String value) {
+        params.put(key, value);
+    }
+
+    public void put(String key, Object value) {
+        params.put(key, value.toString());
+    }
+
+    public void remove(String key) {
+        params.remove(key);
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder stringBuilder = new StringBuilder();
+
+        for (HashMap.Entry<String, String> entry : params.entrySet()) {
+            if (stringBuilder.length() > 0) {
+                stringBuilder.append("&");
+            }
+
+            stringBuilder.append(entry.getKey());
+            stringBuilder.append("=");
+            stringBuilder.append(entry.getValue());
+        }
+
+        return stringBuilder.toString();
+    }
+
+    public String toQueryString(String url) {
+        String queryString = toString();
+
+        if (!TextUtils.isEmpty(queryString)) {
+            url += url.contains("?") ? "&" : "?";
+            url += queryString;
+        }
+
+        return url;
+    }
+
+    public RequestBody toRequestBody() {
+        FormEncodingBuilder builder = new FormEncodingBuilder();
+
+        for (HashMap.Entry<String, String> entry : params.entrySet()) {
+            builder.add(entry.getKey(), entry.getValue());
+        }
+
+        return builder.build();
 
     }
 
