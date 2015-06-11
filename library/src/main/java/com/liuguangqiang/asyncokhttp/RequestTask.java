@@ -16,7 +16,6 @@
 
 package com.liuguangqiang.asyncokhttp;
 
-import com.liuguangqiang.asyncokhttp.handler.BaseResponseHandler;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.Response;

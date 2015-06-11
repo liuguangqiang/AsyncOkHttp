@@ -18,7 +18,6 @@ package com.liuguangqiang.asyncokhttp;
 
 import android.util.Log;
 
-import com.liuguangqiang.asyncokhttp.handler.BaseResponseHandler;
 import com.squareup.okhttp.MediaType;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
@@ -138,11 +137,11 @@ public class AsyncOkHttp {
     //**************************** DELETE ****************************
 
     public void delete(String url, RequestParams params, BaseResponseHandler responseHandler) {
-        delete(params.toQueryString(url), responseHandler);
+        delete(params.toQueryString(url), params.getTag(), responseHandler);
     }
 
-    public void delete(String url, BaseResponseHandler responseHandler) {
-        Request request = new Request.Builder().url(url).delete().build();
+    public void delete(String url, String tag, BaseResponseHandler responseHandler) {
+        Request request = new Request.Builder().url(url).tag(tag).delete().build();
         submitRequest(request, responseHandler);
     }
 
