@@ -16,11 +16,27 @@
 
 package com.liuguangqiang.asyncokhttp.json;
 
+import android.text.TextUtils;
+
+import com.google.gson.JsonParseException;
+import com.google.gson.JsonParser;
+
 /**
  * Created by Eric on 15/6/11.
  */
 public abstract class BaseJsonEngine {
 
     public abstract <T> T parse(String json, Class<?> cls);
+
+    public boolean isJson(String json) {
+        if (TextUtils.isEmpty(json)) return false;
+
+        try {
+            new JsonParser().parse(json);
+            return true;
+        } catch (JsonParseException e) {
+            return false;
+        }
+    }
 
 }

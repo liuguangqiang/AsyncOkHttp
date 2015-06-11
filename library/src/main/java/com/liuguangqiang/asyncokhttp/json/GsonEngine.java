@@ -17,15 +17,33 @@
 package com.liuguangqiang.asyncokhttp.json;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 /**
  * Created by Eric on 15/6/11.
  */
 public class GsonEngine extends BaseJsonEngine {
 
+    /**
+     * exclude fields without expose annotation
+     */
+    private boolean enableExpose = false;
+
+    public GsonEngine(boolean enableExpose) {
+        this.enableExpose = enableExpose;
+    }
+
+    public void setEnableExpose(boolean enableExpose) {
+        this.enableExpose = enableExpose;
+    }
+
     @Override
     public <T> T parse(String json, Class<?> cls) {
-        return (T) new Gson().fromJson(json, cls);
+        return (T) newGson().fromJson(json, cls);
+    }
+
+    private Gson newGson() {
+        return enableExpose ? new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create() : new Gson();
     }
 
 }
