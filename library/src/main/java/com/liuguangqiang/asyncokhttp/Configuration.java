@@ -19,8 +19,6 @@ package com.liuguangqiang.asyncokhttp;
 import com.liuguangqiang.asyncokhttp.json.BaseJsonEngine;
 import com.liuguangqiang.asyncokhttp.json.LoganSquareEngine;
 
-import javax.net.SocketFactory;
-
 /**
  * Created by Eric on 15/6/11.
  */
