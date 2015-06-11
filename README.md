@@ -1,12 +1,45 @@
 AsyncOkHttp
 ===========
+An Android HTTP Library with [OkHttp](https://github.com/square/okhttp). 
+
+##Why use OkHttp?
+OkHttp is an HTTP client that’s efficient by default:
+
+* HTTP/2 and SPDY support allows all requests to the same host to share a socket.
+* Connection pooling reduces request latency (if SPDY isn’t available).
+* Transparent GZIP shrinks download sizes.
+* Response caching avoids the network completely for repeat requests.
+
+##Features
+* Asynchronous HTTP requests.
+* Perform HTTP requests with OkHttp.
+* Parse json string with Gson or LoganSquare.
+* Optional or custom json engine.
+
+##Examples
+### Get
+    AsyncOkHttp.getInstance().get(url, new BaseResponseHandler() {
+        @Override
+        public void onSuccess(int code, String responseString) {
+			//TODO
+        }
+    });
+    
+### POST
+    AsyncOkHttp.getInstance().post(url, params, new BaseResponseHandler() {
+        @Override
+        public void onSuccess(int code, String responseString) {
+			//TODO
+        }
+    });
+
+##Usage
 
 ##JSON
 AsyncOkHttp allows user to set json engine for parsing json string.
 
-* GSON
-* LoganSquare
-* Or Custom
+* [Gson](https://github.com/google/gson)
+* [LoganSquare](https://github.com/bluelinelabs/LoganSquare)
 
 ##License
 
