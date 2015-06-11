@@ -1,6 +1,13 @@
 AsyncOkHttp
 ===========
 
+##JSON
+AsyncOkHttp allows user to set json engine for parsing json string.
+
+* GSON
+* LoganSquare
+* Or Custom
+
 ##License
 
     Copyright 2015 Eric Liu
