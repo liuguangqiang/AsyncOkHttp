@@ -18,6 +18,7 @@ package com.liuguangqiang.asyncokhttp;
 
 import android.util.Log;
 
+import com.squareup.okhttp.Headers;
 import com.squareup.okhttp.MediaType;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
@@ -44,11 +45,14 @@ public class AsyncOkHttp {
 
     private Configuration mConfiguration;
 
+    private Headers.Builder mHeadersBuilder = new Headers.Builder();
+
     private AsyncOkHttp() {
         mThreadPool = Executors.newCachedThreadPool();
         mHttpClient = new OkHttpClient();
 
         setConfiguration(new Configuration.Builder().build());
+        addHeader("User-Agent", Constants.USER_AGENT);
     }
 
     public static AsyncOkHttp getInstance() {
@@ -70,6 +74,14 @@ public class AsyncOkHttp {
         mHttpClient.setReadTimeout(mConfiguration.getReadTimeout(), TimeUnit.SECONDS);
     }
 
+    public void addHeader(String name, String value) {
+        mHeadersBuilder.add(name, value);
+    }
+
+    public void removeHeader(String name) {
+        mHeadersBuilder.removeAll(name);
+    }
+
     //**************************** GET ****************************
 
     public void get(String url, RequestParams params, BaseResponseHandler responseHandler) {
@@ -78,7 +90,7 @@ public class AsyncOkHttp {
 
     public void get(String url, BaseResponseHandler responseHandler) {
         Log.i(TAG, url);
-        Request request = new Request.Builder().url(url).tag(url).build();
+        Request request = new Request.Builder().url(url).tag(url).headers(mHeadersBuilder.build()).build();
         submitRequest(request, responseHandler);
     }
 
@@ -109,7 +121,7 @@ public class AsyncOkHttp {
     }
 
     public void post(String url, RequestBody requestBody, BaseResponseHandler responseHandler) {
-        Request request = new Request.Builder().url(url).tag(url).post(requestBody).build();
+        Request request = new Request.Builder().url(url).tag(url).post(requestBody).headers(mHeadersBuilder.build()).build();
         submitRequest(request, responseHandler);
     }
 
@@ -126,7 +138,7 @@ public class AsyncOkHttp {
     }
 
     public void put(String url, RequestBody requestBody, BaseResponseHandler responseHandler) {
-        Request request = new Request.Builder().url(url).tag(url).put(requestBody).build();
+        Request request = new Request.Builder().url(url).tag(url).put(requestBody).headers(mHeadersBuilder.build()).build();
         submitRequest(request, responseHandler);
     }
 
@@ -137,7 +149,7 @@ public class AsyncOkHttp {
     }
 
     public void delete(String url, BaseResponseHandler responseHandler) {
-        Request request = new Request.Builder().url(url).tag(url).delete().build();
+        Request request = new Request.Builder().url(url).tag(url).delete().headers(mHeadersBuilder.build()).build();
         submitRequest(request, responseHandler);
     }
 
@@ -158,6 +170,8 @@ public class AsyncOkHttp {
      * @param responseHandler
      */
     private void submitRequest(Request request, BaseResponseHandler responseHandler) {
+        Log.i("AsyncOkHttp", "header:" + request.headers().toString());
+
         RequestTask task = new RequestTask(mHttpClient, request, responseHandler);
         mThreadPool.submit(task);
     }
