@@ -28,20 +28,10 @@ import java.util.HashMap;
  */
 public class RequestParams {
 
-    private String tag;
-
     private final HashMap<String, String> params;
 
     public RequestParams() {
         params = new HashMap<>();
-    }
-
-    public String getTag() {
-        return tag;
-    }
-
-    public void setTag(String tag) {
-        this.tag = tag;
     }
 
     public void put(String key, String value) {

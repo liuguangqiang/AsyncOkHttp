@@ -72,17 +72,13 @@ public class AsyncOkHttp {
 
     //**************************** GET ****************************
 
-    public void get(String url, BaseResponseHandler responseHandler) {
-        get(url, url, responseHandler);
-    }
-
     public void get(String url, RequestParams params, BaseResponseHandler responseHandler) {
-        get(params.toQueryString(url), params.getTag(), responseHandler);
+        get(params.toQueryString(url), responseHandler);
     }
 
-    public void get(String url, String tag, BaseResponseHandler responseHandler) {
+    public void get(String url, BaseResponseHandler responseHandler) {
         Log.i(TAG, url);
-        Request request = new Request.Builder().url(url).tag(tag).build();
+        Request request = new Request.Builder().url(url).tag(url).build();
         submitRequest(request, responseHandler);
     }
 
@@ -97,7 +93,7 @@ public class AsyncOkHttp {
      */
     public void post(String url, String json, BaseResponseHandler responseHandler) {
         RequestBody requestBody = RequestBody.create(JSON, json);
-        post(url, null, requestBody, responseHandler);
+        post(url, requestBody, responseHandler);
     }
 
     /**
@@ -109,11 +105,11 @@ public class AsyncOkHttp {
      */
     public void post(String url, RequestParams params, BaseResponseHandler responseHandler) {
         RequestBody requestBody = params.toRequestBody();
-        post(url, params.getTag(), requestBody, responseHandler);
+        post(url, requestBody, responseHandler);
     }
 
-    public void post(String url, String tag, RequestBody requestBody, BaseResponseHandler responseHandler) {
-        Request request = new Request.Builder().url(url).tag(tag).post(requestBody).build();
+    public void post(String url, RequestBody requestBody, BaseResponseHandler responseHandler) {
+        Request request = new Request.Builder().url(url).tag(url).post(requestBody).build();
         submitRequest(request, responseHandler);
     }
 
@@ -121,27 +117,27 @@ public class AsyncOkHttp {
 
     public void put(String url, String json, BaseResponseHandler responseHandler) {
         RequestBody requestBody = RequestBody.create(JSON, json);
-        put(url, null, requestBody, responseHandler);
+        put(url, requestBody, responseHandler);
     }
 
     public void put(String url, RequestParams params, BaseResponseHandler responseHandler) {
         RequestBody requestBody = params.toRequestBody();
-        put(url, params.getTag(), requestBody, responseHandler);
+        put(url, requestBody, responseHandler);
     }
 
-    public void put(String url, String tag, RequestBody requestBody, BaseResponseHandler responseHandler) {
-        Request request = new Request.Builder().url(url).tag(tag).put(requestBody).build();
+    public void put(String url, RequestBody requestBody, BaseResponseHandler responseHandler) {
+        Request request = new Request.Builder().url(url).tag(url).put(requestBody).build();
         submitRequest(request, responseHandler);
     }
 
     //**************************** DELETE ****************************
 
     public void delete(String url, RequestParams params, BaseResponseHandler responseHandler) {
-        delete(params.toQueryString(url), params.getTag(), responseHandler);
+        delete(params.toQueryString(url), responseHandler);
     }
 
-    public void delete(String url, String tag, BaseResponseHandler responseHandler) {
-        Request request = new Request.Builder().url(url).tag(tag).delete().build();
+    public void delete(String url, BaseResponseHandler responseHandler) {
+        Request request = new Request.Builder().url(url).tag(url).delete().build();
         submitRequest(request, responseHandler);
     }
 
@@ -149,10 +145,10 @@ public class AsyncOkHttp {
      * Cancels all scheduled tasks tagged with tag.
      * Requests that are already complete cannot be canceled.
      *
-     * @param tag
+     * @param url
      */
-    public void cancel(String tag) {
-        mHttpClient.cancel(tag);
+    public void cancel(String url) {
+        mHttpClient.cancel(url);
     }
 
     /**
