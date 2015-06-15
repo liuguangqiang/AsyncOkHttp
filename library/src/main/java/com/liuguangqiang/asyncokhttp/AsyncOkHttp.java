@@ -16,8 +16,6 @@
 
 package com.liuguangqiang.asyncokhttp;
 
-import android.util.Log;
-
 import com.squareup.okhttp.Headers;
 import com.squareup.okhttp.MediaType;
 import com.squareup.okhttp.OkHttpClient;
@@ -37,7 +35,7 @@ public class AsyncOkHttp {
 
     private static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
 
-    private static AsyncOkHttp instance = new AsyncOkHttp();
+    private volatile static AsyncOkHttp instance;
 
     private ExecutorService mThreadPool;
 
@@ -45,17 +43,23 @@ public class AsyncOkHttp {
 
     private Configuration mConfiguration;
 
-    private Headers.Builder mHeadersBuilder = new Headers.Builder();
+    private Headers.Builder mHeadersBuilder;
 
     private AsyncOkHttp() {
         mThreadPool = Executors.newCachedThreadPool();
         mHttpClient = new OkHttpClient();
 
-        setConfiguration(new Configuration.Builder().build());
-        addHeader("User-Agent", Constants.USER_AGENT);
+        init(Configuration.createDefault());
     }
 
     public static AsyncOkHttp getInstance() {
+        if (instance == null) {
+            synchronized (AsyncOkHttp.class) {
+                if (instance == null) {
+                    instance = new AsyncOkHttp();
+                }
+            }
+        }
         return instance;
     }
 
@@ -63,15 +67,19 @@ public class AsyncOkHttp {
         return mHttpClient;
     }
 
-    public Configuration getConfiguration() {
-        return mConfiguration;
-    }
+    public void init(Configuration configuration) {
+        if (configuration == null)
+            throw new IllegalArgumentException(
+                    "AsyncOkHttp can not be initialized with null");
 
-    public void setConfiguration(Configuration configuration) {
         mConfiguration = configuration;
-
         mHttpClient.setConnectTimeout(mConfiguration.getConnectTimeout(), TimeUnit.SECONDS);
         mHttpClient.setReadTimeout(mConfiguration.getReadTimeout(), TimeUnit.SECONDS);
+        mHeadersBuilder = mConfiguration.getHeadersBuilder();
+    }
+
+    public Configuration getConfiguration() {
+        return mConfiguration;
     }
 
     public void addHeader(String name, String value) {
@@ -82,19 +90,29 @@ public class AsyncOkHttp {
         mHeadersBuilder.removeAll(name);
     }
 
-    //**************************** GET ****************************
+    //************************************ HEAD ************************************
+
+    public void head(String url, RequestParams params, BaseResponseHandler responseHandler) {
+        head(params.toQueryString(url), responseHandler);
+    }
+
+    public void head(String url, BaseResponseHandler responseHandler) {
+        Request.Builder requestBuilder = createRequestBuilder(url).head();
+        submitRequest(requestBuilder, responseHandler);
+    }
+
+    //************************************ GET ************************************
 
     public void get(String url, RequestParams params, BaseResponseHandler responseHandler) {
         get(params.toQueryString(url), responseHandler);
     }
 
     public void get(String url, BaseResponseHandler responseHandler) {
-        Log.i(TAG, url);
-        Request request = new Request.Builder().url(url).tag(url).headers(mHeadersBuilder.build()).build();
-        submitRequest(request, responseHandler);
+        Request.Builder requestBuilder = createRequestBuilder(url).get();
+        submitRequest(requestBuilder, responseHandler);
     }
 
-    //**************************** POST ****************************
+    //************************************ POST ************************************
 
     /**
      * Post JSON to server.
@@ -121,11 +139,11 @@ public class AsyncOkHttp {
     }
 
     public void post(String url, RequestBody requestBody, BaseResponseHandler responseHandler) {
-        Request request = new Request.Builder().url(url).tag(url).post(requestBody).headers(mHeadersBuilder.build()).build();
-        submitRequest(request, responseHandler);
+        Request.Builder requestBuilder = createRequestBuilder(url).post(requestBody);
+        submitRequest(requestBuilder, responseHandler);
     }
 
-    //**************************** PUT ****************************
+    //************************************ PUT ************************************
 
     public void put(String url, String json, BaseResponseHandler responseHandler) {
         RequestBody requestBody = RequestBody.create(JSON, json);
@@ -138,19 +156,30 @@ public class AsyncOkHttp {
     }
 
     public void put(String url, RequestBody requestBody, BaseResponseHandler responseHandler) {
-        Request request = new Request.Builder().url(url).tag(url).put(requestBody).headers(mHeadersBuilder.build()).build();
-        submitRequest(request, responseHandler);
+        Request.Builder requestBuilder = createRequestBuilder(url).put(requestBody);
+        submitRequest(requestBuilder, responseHandler);
     }
 
-    //**************************** DELETE ****************************
+    //************************************ DELETE ************************************
 
     public void delete(String url, RequestParams params, BaseResponseHandler responseHandler) {
         delete(params.toQueryString(url), responseHandler);
     }
 
     public void delete(String url, BaseResponseHandler responseHandler) {
-        Request request = new Request.Builder().url(url).tag(url).delete().headers(mHeadersBuilder.build()).build();
+        Request.Builder request = createRequestBuilder(url).delete();
         submitRequest(request, responseHandler);
+    }
+
+    /**
+     * Create a Request.Builder.
+     *
+     * @param url
+     * @return
+     */
+    private Request.Builder createRequestBuilder(String url) {
+        Request.Builder builder = new Request.Builder().url(url).tag(url).headers(mHeadersBuilder.build());
+        return builder;
     }
 
     /**
@@ -164,14 +193,22 @@ public class AsyncOkHttp {
     }
 
     /**
-     * Submits a Runnable task to ExecutorService.
+     * Submit a Runnable task to ExecutorService.
+     *
+     * @param builder
+     * @param responseHandler
+     */
+    public void submitRequest(Request.Builder builder, BaseResponseHandler responseHandler) {
+        submitRequest(builder.build(), responseHandler);
+    }
+
+    /**
+     * Submit a Runnable task to ExecutorService.
      *
      * @param request
      * @param responseHandler
      */
-    private void submitRequest(Request request, BaseResponseHandler responseHandler) {
-        Log.i("AsyncOkHttp", "header:" + request.headers().toString());
-
+    public void submitRequest(Request request, BaseResponseHandler responseHandler) {
         RequestTask task = new RequestTask(mHttpClient, request, responseHandler);
         mThreadPool.submit(task);
     }
