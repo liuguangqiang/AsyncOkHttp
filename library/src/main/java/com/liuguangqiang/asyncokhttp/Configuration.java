@@ -17,6 +17,7 @@
 package com.liuguangqiang.asyncokhttp;
 
 import com.liuguangqiang.asyncokhttp.json.BaseJsonEngine;
+import com.liuguangqiang.asyncokhttp.json.GsonEngine;
 import com.liuguangqiang.asyncokhttp.json.LoganSquareEngine;
 
 /**
@@ -65,7 +66,7 @@ public class Configuration {
         private long readTimeout;
 
         public Builder() {
-            jsonEngine = new LoganSquareEngine();
+            jsonEngine = new GsonEngine();
             connectTimeout = 30;
             readTimeout = 30;
         }

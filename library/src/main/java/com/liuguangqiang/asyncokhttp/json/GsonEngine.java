@@ -29,6 +29,9 @@ public class GsonEngine extends BaseJsonEngine {
      */
     private boolean enableExpose = false;
 
+    public GsonEngine() {
+    }
+
     public GsonEngine(boolean enableExpose) {
         this.enableExpose = enableExpose;
     }
