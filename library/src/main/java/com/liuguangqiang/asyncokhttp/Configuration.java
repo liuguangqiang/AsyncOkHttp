@@ -18,7 +18,7 @@ package com.liuguangqiang.asyncokhttp;
 
 import com.liuguangqiang.asyncokhttp.json.BaseJsonEngine;
 import com.liuguangqiang.asyncokhttp.json.GsonEngine;
-import com.liuguangqiang.asyncokhttp.json.LoganSquareEngine;
+import com.squareup.okhttp.Headers;
 
 /**
  * Created by Eric on 15/6/11.
@@ -28,6 +28,7 @@ public class Configuration {
     private BaseJsonEngine jsonEngine;
     private long connectTimeout;
     private long readTimeout;
+    private Headers.Builder headersBuilder;
 
     public BaseJsonEngine getJsonEngine() {
         return jsonEngine;
@@ -53,10 +54,23 @@ public class Configuration {
         this.readTimeout = readTimeout;
     }
 
+    public Headers.Builder getHeadersBuilder() {
+        return headersBuilder;
+    }
+
+    public void setHeadersBuilder(Headers.Builder headersBuilder) {
+        this.headersBuilder = headersBuilder;
+    }
+
     public Configuration(Builder builder) {
         jsonEngine = builder.jsonEngine;
         connectTimeout = builder.connectTimeout;
         readTimeout = builder.readTimeout;
+        headersBuilder = builder.headersBuilder;
+    }
+
+    public static Configuration createDefault() {
+        return new Builder().build();
     }
 
     public static class Builder {
@@ -64,11 +78,14 @@ public class Configuration {
         private BaseJsonEngine jsonEngine;
         private long connectTimeout;
         private long readTimeout;
+        private Headers.Builder headersBuilder;
 
         public Builder() {
             jsonEngine = new GsonEngine();
             connectTimeout = 30;
             readTimeout = 30;
+            headersBuilder = new Headers.Builder();
+            headersBuilder.add("User-Agent", Constants.USER_AGENT);
         }
 
         public Builder jsonEngine(BaseJsonEngine jsonEngine) {
@@ -83,6 +100,11 @@ public class Configuration {
 
         public Builder readTimeout(long readTimeout) {
             this.readTimeout = readTimeout;
+            return this;
+        }
+
+        public Builder headers(Headers.Builder header) {
+            this.headersBuilder = header;
             return this;
         }
 
