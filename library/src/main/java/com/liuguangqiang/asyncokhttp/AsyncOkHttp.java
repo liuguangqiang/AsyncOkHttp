@@ -23,7 +23,6 @@ import com.squareup.okhttp.Request;
 import com.squareup.okhttp.RequestBody;
 
 import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -37,16 +36,13 @@ public class AsyncOkHttp {
 
     private volatile static AsyncOkHttp instance;
 
-    private ExecutorService mThreadPool;
-
-    private OkHttpClient mHttpClient;
+    private final OkHttpClient mHttpClient;
 
     private Configuration mConfiguration;
-
+    private ExecutorService mThreadPool;
     private Headers.Builder mHeadersBuilder;
 
     private AsyncOkHttp() {
-        mThreadPool = Executors.newCachedThreadPool();
         mHttpClient = new OkHttpClient();
 
         init(Configuration.createDefault());
@@ -73,19 +69,32 @@ public class AsyncOkHttp {
                     "AsyncOkHttp can not be initialized with null");
 
         mConfiguration = configuration;
+
+        mThreadPool = mConfiguration.getThreadPool();
+        mHeadersBuilder = mConfiguration.getHeadersBuilder();
         mHttpClient.setConnectTimeout(mConfiguration.getConnectTimeout(), TimeUnit.SECONDS);
         mHttpClient.setReadTimeout(mConfiguration.getReadTimeout(), TimeUnit.SECONDS);
-        mHeadersBuilder = mConfiguration.getHeadersBuilder();
     }
 
     public Configuration getConfiguration() {
         return mConfiguration;
     }
 
+    /**
+     * Add a header for all requests.
+     *
+     * @param name  the name of header.
+     * @param value the value of header.
+     */
     public void addHeader(String name, String value) {
         mHeadersBuilder.add(name, value);
     }
 
+    /**
+     * Remove a header for all requests.
+     *
+     * @param name the name of header.
+     */
     public void removeHeader(String name) {
         mHeadersBuilder.removeAll(name);
     }
@@ -103,10 +112,23 @@ public class AsyncOkHttp {
 
     //************************************ GET ************************************
 
+    /**
+     * Perform HTTP GET request.
+     *
+     * @param url
+     * @param params
+     * @param responseHandler
+     */
     public void get(String url, RequestParams params, BaseResponseHandler responseHandler) {
         get(params.toQueryString(url), responseHandler);
     }
 
+    /**
+     * Perform HTTP GET request.
+     *
+     * @param url
+     * @param responseHandler
+     */
     public void get(String url, BaseResponseHandler responseHandler) {
         Request.Builder requestBuilder = createRequestBuilder(url).get();
         submitRequest(requestBuilder, responseHandler);
@@ -115,7 +137,7 @@ public class AsyncOkHttp {
     //************************************ POST ************************************
 
     /**
-     * Post JSON to server.
+     * Perform HTTP POST request.
      *
      * @param url
      * @param json
@@ -127,7 +149,7 @@ public class AsyncOkHttp {
     }
 
     /**
-     * Post parameters to server.
+     * Perform HTTP POST request.
      *
      * @param url
      * @param params
@@ -138,6 +160,13 @@ public class AsyncOkHttp {
         post(url, requestBody, responseHandler);
     }
 
+    /**
+     * Perform HTTP POST request.
+     *
+     * @param url
+     * @param requestBody
+     * @param responseHandler
+     */
     public void post(String url, RequestBody requestBody, BaseResponseHandler responseHandler) {
         Request.Builder requestBuilder = createRequestBuilder(url).post(requestBody);
         submitRequest(requestBuilder, responseHandler);
@@ -145,16 +174,37 @@ public class AsyncOkHttp {
 
     //************************************ PUT ************************************
 
+    /**
+     * Perform HTTP PUT request.
+     *
+     * @param url
+     * @param json
+     * @param responseHandler
+     */
     public void put(String url, String json, BaseResponseHandler responseHandler) {
         RequestBody requestBody = RequestBody.create(JSON, json);
         put(url, requestBody, responseHandler);
     }
 
+    /**
+     * Perform HTTP PUT request.
+     *
+     * @param url
+     * @param params
+     * @param responseHandler
+     */
     public void put(String url, RequestParams params, BaseResponseHandler responseHandler) {
         RequestBody requestBody = params.toRequestBody();
         put(url, requestBody, responseHandler);
     }
 
+    /**
+     * Perform HTTP PUT request.
+     *
+     * @param url
+     * @param requestBody
+     * @param responseHandler
+     */
     public void put(String url, RequestBody requestBody, BaseResponseHandler responseHandler) {
         Request.Builder requestBuilder = createRequestBuilder(url).put(requestBody);
         submitRequest(requestBuilder, responseHandler);
@@ -162,10 +212,23 @@ public class AsyncOkHttp {
 
     //************************************ DELETE ************************************
 
+    /**
+     * Perform HTTP DELETE request.
+     *
+     * @param url
+     * @param params
+     * @param responseHandler
+     */
     public void delete(String url, RequestParams params, BaseResponseHandler responseHandler) {
         delete(params.toQueryString(url), responseHandler);
     }
 
+    /**
+     * Perform HTTP DELETE request.
+     *
+     * @param url
+     * @param responseHandler
+     */
     public void delete(String url, BaseResponseHandler responseHandler) {
         Request.Builder request = createRequestBuilder(url).delete();
         submitRequest(request, responseHandler);

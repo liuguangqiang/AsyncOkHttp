@@ -20,11 +20,15 @@ import com.liuguangqiang.asyncokhttp.json.BaseJsonEngine;
 import com.liuguangqiang.asyncokhttp.json.GsonEngine;
 import com.squareup.okhttp.Headers;
 
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
 /**
  * Created by Eric on 15/6/11.
  */
 public class Configuration {
 
+    private ExecutorService threadPool;
     private BaseJsonEngine jsonEngine;
     private long connectTimeout;
     private long readTimeout;
@@ -62,7 +66,12 @@ public class Configuration {
         this.headersBuilder = headersBuilder;
     }
 
+    public ExecutorService getThreadPool() {
+        return threadPool;
+    }
+
     public Configuration(Builder builder) {
+        threadPool = builder.threadPool;
         jsonEngine = builder.jsonEngine;
         connectTimeout = builder.connectTimeout;
         readTimeout = builder.readTimeout;
@@ -79,13 +88,20 @@ public class Configuration {
         private long connectTimeout;
         private long readTimeout;
         private Headers.Builder headersBuilder;
+        private ExecutorService threadPool;
 
         public Builder() {
+            threadPool = Executors.newCachedThreadPool();
             jsonEngine = new GsonEngine();
             connectTimeout = 30;
             readTimeout = 30;
             headersBuilder = new Headers.Builder();
             headersBuilder.add("User-Agent", Constants.USER_AGENT);
+        }
+
+        public Builder ExecutorService(ExecutorService executorService) {
+            this.threadPool = executorService;
+            return this;
         }
 
         public Builder jsonEngine(BaseJsonEngine jsonEngine) {
