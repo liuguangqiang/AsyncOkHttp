@@ -101,10 +101,23 @@ public class AsyncOkHttp {
 
     //************************************ HEAD ************************************
 
+    /**
+     * Perform HTTP HEAD request with a RequestParams.
+     *
+     * @param url
+     * @param params
+     * @param responseHandler
+     */
     public void head(String url, RequestParams params, BaseResponseHandler responseHandler) {
         head(params.toQueryString(url), responseHandler);
     }
 
+    /**
+     * Perform HTTP HEAD request.
+     *
+     * @param url             the URL of HTTP request.
+     * @param responseHandler the callback of the response.
+     */
     public void head(String url, BaseResponseHandler responseHandler) {
         Request.Builder requestBuilder = createRequestBuilder(url).head();
         submitRequest(requestBuilder, responseHandler);
@@ -113,11 +126,11 @@ public class AsyncOkHttp {
     //************************************ GET ************************************
 
     /**
-     * Perform HTTP GET request.
+     * Perform HTTP GET request with a RequestParams.
      *
-     * @param url
-     * @param params
-     * @param responseHandler
+     * @param url             the URL of HTTP request.
+     * @param params          the parameter of Request Body.
+     * @param responseHandler the callback of the response.
      */
     public void get(String url, RequestParams params, BaseResponseHandler responseHandler) {
         get(params.toQueryString(url), responseHandler);
@@ -126,8 +139,8 @@ public class AsyncOkHttp {
     /**
      * Perform HTTP GET request.
      *
-     * @param url
-     * @param responseHandler
+     * @param url             the URL of HTTP request.
+     * @param responseHandler the callback of the response.
      */
     public void get(String url, BaseResponseHandler responseHandler) {
         Request.Builder requestBuilder = createRequestBuilder(url).get();
@@ -137,11 +150,11 @@ public class AsyncOkHttp {
     //************************************ POST ************************************
 
     /**
-     * Perform HTTP POST request.
+     * Perform HTTP POST request with a JSON string.
      *
-     * @param url
-     * @param json
-     * @param responseHandler
+     * @param url             the URL of HTTP request.
+     * @param json            the parameter of Request Body.
+     * @param responseHandler the callback of the response.
      */
     public void post(String url, String json, BaseResponseHandler responseHandler) {
         RequestBody requestBody = RequestBody.create(JSON, json);
@@ -149,11 +162,11 @@ public class AsyncOkHttp {
     }
 
     /**
-     * Perform HTTP POST request.
+     * Perform HTTP POST request with a RequestParams.
      *
-     * @param url
-     * @param params
-     * @param responseHandler
+     * @param url             the URL of HTTP request.
+     * @param params          the parameter of Request Body.
+     * @param responseHandler the callback of the response.
      */
     public void post(String url, RequestParams params, BaseResponseHandler responseHandler) {
         RequestBody requestBody = params.toRequestBody();
@@ -161,11 +174,11 @@ public class AsyncOkHttp {
     }
 
     /**
-     * Perform HTTP POST request.
+     * Perform HTTP POST request with a RequestBody.
      *
-     * @param url
-     * @param requestBody
-     * @param responseHandler
+     * @param url             the URL of HTTP request.
+     * @param requestBody     the Request Body
+     * @param responseHandler the callback of the response.
      */
     public void post(String url, RequestBody requestBody, BaseResponseHandler responseHandler) {
         Request.Builder requestBuilder = createRequestBuilder(url).post(requestBody);
@@ -175,11 +188,11 @@ public class AsyncOkHttp {
     //************************************ PUT ************************************
 
     /**
-     * Perform HTTP PUT request.
+     * Perform HTTP PUT request with a JSON string.
      *
-     * @param url
-     * @param json
-     * @param responseHandler
+     * @param url             the URL of HTTP request.
+     * @param json            the parameter of Request Body.
+     * @param responseHandler the callback of the response.
      */
     public void put(String url, String json, BaseResponseHandler responseHandler) {
         RequestBody requestBody = RequestBody.create(JSON, json);
@@ -187,11 +200,11 @@ public class AsyncOkHttp {
     }
 
     /**
-     * Perform HTTP PUT request.
+     * Perform HTTP PUT request with a RequestParams.
      *
-     * @param url
-     * @param params
-     * @param responseHandler
+     * @param url             the URL of HTTP request.
+     * @param params          the parameter of Request Body.
+     * @param responseHandler the callback of the response.
      */
     public void put(String url, RequestParams params, BaseResponseHandler responseHandler) {
         RequestBody requestBody = params.toRequestBody();
@@ -199,11 +212,11 @@ public class AsyncOkHttp {
     }
 
     /**
-     * Perform HTTP PUT request.
+     * Perform HTTP PUT request with a RequestBody.
      *
-     * @param url
-     * @param requestBody
-     * @param responseHandler
+     * @param url             the URL of HTTP request.
+     * @param requestBody     the Request Body
+     * @param responseHandler the callback of the response.
      */
     public void put(String url, RequestBody requestBody, BaseResponseHandler responseHandler) {
         Request.Builder requestBuilder = createRequestBuilder(url).put(requestBody);
@@ -213,11 +226,11 @@ public class AsyncOkHttp {
     //************************************ DELETE ************************************
 
     /**
-     * Perform HTTP DELETE request.
+     * Perform HTTP DELETE request with a RequestParams.
      *
-     * @param url
-     * @param params
-     * @param responseHandler
+     * @param url             the URL of HTTP request.
+     * @param params          the parameter of Request Body.
+     * @param responseHandler the callback of the response.
      */
     public void delete(String url, RequestParams params, BaseResponseHandler responseHandler) {
         delete(params.toQueryString(url), responseHandler);
@@ -226,8 +239,8 @@ public class AsyncOkHttp {
     /**
      * Perform HTTP DELETE request.
      *
-     * @param url
-     * @param responseHandler
+     * @param url             the URL of HTTP request.
+     * @param responseHandler the callback of the response.
      */
     public void delete(String url, BaseResponseHandler responseHandler) {
         Request.Builder request = createRequestBuilder(url).delete();
@@ -237,7 +250,7 @@ public class AsyncOkHttp {
     /**
      * Create a Request.Builder.
      *
-     * @param url
+     * @param url the URL of HTTP request.
      * @return
      */
     private Request.Builder createRequestBuilder(String url) {
@@ -249,27 +262,27 @@ public class AsyncOkHttp {
      * Cancels all scheduled tasks tagged with tag.
      * Requests that are already complete cannot be canceled.
      *
-     * @param url
+     * @param url the URL of HTTP request.
      */
     public void cancel(String url) {
         mHttpClient.cancel(url);
     }
 
     /**
-     * Submit a Runnable task to ExecutorService.
+     * Submit a Runnable task to thread pool.
      *
      * @param builder
-     * @param responseHandler
+     * @param responseHandler the callback of the response.
      */
     public void submitRequest(Request.Builder builder, BaseResponseHandler responseHandler) {
         submitRequest(builder.build(), responseHandler);
     }
 
     /**
-     * Submit a Runnable task to ExecutorService.
+     * Submit a Runnable task to thread pool.
      *
      * @param request
-     * @param responseHandler
+     * @param responseHandler the callback of the response.
      */
     public void submitRequest(Request request, BaseResponseHandler responseHandler) {
         RequestTask task = new RequestTask(mHttpClient, request, responseHandler);
