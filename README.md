@@ -33,13 +33,46 @@ OkHttp is an HTTP client that’s efficient by default:
         }
     });
 
-##Usage
-
 ##JSON
 AsyncOkHttp allows user to set json engine for parsing json string.
 
 * [Gson](https://github.com/google/gson)
 * [LoganSquare](https://github.com/bluelinelabs/LoganSquare)
+
+###[LoganSquare Sample Model](https://github.com/bluelinelabs/LoganSquare/blob/master/docs/AnnotationsOnlyModel.md)
+    @JsonObject
+    public class TestEntity {
+
+        @JsonField
+        public int id;
+
+    }
+
+###Gson Sample Model
+    public class TestEntity {
+
+        public int id;
+
+    }
+
+##Usage
+
+###Gradle
+```
+dependencies {
+   	compile 'com.github.liuguangqiang.asyncokhttp:library:0.0.1'
+}
+```
+
+###Maven
+```
+<dependency>
+  	<groupId>com.github.liuguangqiang.swipeback</groupId>
+  	<artifactId>asyncokhttp</artifactId>
+  	<version>0.0.1</version>
+  	<type>aar</type>
+</dependency>
+```
 
 ##License
 
