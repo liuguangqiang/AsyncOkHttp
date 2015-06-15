@@ -67,8 +67,8 @@ dependencies {
 ###Maven
 ```
 <dependency>
-  	<groupId>com.github.liuguangqiang.swipeback</groupId>
-  	<artifactId>asyncokhttp</artifactId>
+  	<groupId>com.github.liuguangqiang.asyncokhttp</groupId>
+  	<artifactId>library</artifactId>
   	<version>0.0.1</version>
   	<type>aar</type>
 </dependency>
