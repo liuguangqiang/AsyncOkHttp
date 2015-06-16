@@ -25,6 +25,8 @@ import com.squareup.okhttp.RequestBody;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.TimeUnit;
 
+import javax.net.ssl.SSLSocketFactory;
+
 /**
  * Created by Eric on 15/6/10.
  */
@@ -45,6 +47,8 @@ public class AsyncOkHttp {
     private AsyncOkHttp() {
         mHttpClient = new OkHttpClient();
         init(Configuration.createDefault());
+
+        mHttpClient.setSslSocketFactory(null);
     }
 
     public static AsyncOkHttp getInstance() {
@@ -77,6 +81,16 @@ public class AsyncOkHttp {
 
     public Configuration getConfiguration() {
         return mConfiguration;
+    }
+
+    /**
+     * /**
+     * Sets the socket factory used to secure HTTPS connections.
+     * <p/>
+     * <p>If unset, a lazily created SSL socket factory will be used.
+     */
+    public void setSslSocketFactory(SSLSocketFactory sslSocketFactory) {
+        mHttpClient.setSslSocketFactory(sslSocketFactory);
     }
 
     /**
