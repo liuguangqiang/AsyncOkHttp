@@ -44,7 +44,6 @@ public class AsyncOkHttp {
 
     private AsyncOkHttp() {
         mHttpClient = new OkHttpClient();
-
         init(Configuration.createDefault());
     }
 

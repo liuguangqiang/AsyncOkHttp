@@ -27,6 +27,8 @@ import java.io.IOException;
  */
 public class RequestTask implements Runnable {
 
+    private OkHttpClient mClient;
+    private Request mRequest;
     private BaseResponseHandler mResponseHandler;
 
     @Override
@@ -39,10 +41,6 @@ public class RequestTask implements Runnable {
         mRequest = request;
         mResponseHandler = responseHandler;
     }
-
-    private OkHttpClient mClient;
-
-    private Request mRequest;
 
     public void execute() {
         try {
