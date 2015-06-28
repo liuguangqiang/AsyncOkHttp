@@ -45,6 +45,7 @@ public class RequestTask implements Runnable {
     public void execute() {
         try {
             Response response = mClient.newCall(mRequest).execute();
+            mResponseHandler.sendStart();
             int code = response.code();
             String responseString = "without response body";
             if (response.body() != null)
