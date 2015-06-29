@@ -37,26 +37,26 @@ public abstract class BaseResponseHandler {
     }
 
     public void sendSuccess(int code, String responseString) {
-        sentMessage(SUCCESS, code, responseString);
+        sendMessage(SUCCESS, code, responseString);
     }
 
     public void sendFailure(int code, String responseString) {
-        sentMessage(FAILURE, code, responseString);
+        sendMessage(FAILURE, code, responseString);
     }
 
     public void sendCancel() {
         sendMessage(CANCEL);
     }
 
-    public void sendMessage(int what) {
-        sentMessage(what, -1, null);
+    private void sendMessage(int what) {
+        sendMessage(what, -1);
     }
 
-    public void sendMessage(int what, int code) {
-        sentMessage(what, code, null);
+    private void sendMessage(int what, int code) {
+        sendMessage(what, code, null);
     }
 
-    public void sentMessage(int what, int code, String responseString) {
+    private void sendMessage(int what, int code, String responseString) {
         Message message = mHandler.obtainMessage();
         message.what = what;
         if (code >= 0)
