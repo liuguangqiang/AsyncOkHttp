@@ -24,6 +24,6 @@ dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     compile 'com.android.support:appcompat-v7:22.2.0'
     compile project(':library')
-
     apt 'com.bluelinelabs:logansquare-compiler:1.1.0'
+    compile 'com.squareup.picasso:picasso:2.3.2'
 }

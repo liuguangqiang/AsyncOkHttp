@@ -24,7 +24,7 @@ import java.io.IOException;
 
 /**
  * Perform a http request.
- * <p>
+ * <p/>
  * Created by Eric on 15/6/10.
  */
 public class RequestTask implements Runnable {

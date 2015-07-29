@@ -19,7 +19,6 @@ package com.liuguangqiang.asyncokhttp;
 import com.liuguangqiang.asyncokhttp.json.BaseJsonEngine;
 
 /**
- * <p/>
  * Created by Eric on 15/6/11.
  */
 public class JsonResponseHandler<T> extends BaseResponseHandler {

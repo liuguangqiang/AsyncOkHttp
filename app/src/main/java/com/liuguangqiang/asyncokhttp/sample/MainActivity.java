@@ -3,12 +3,14 @@ package com.liuguangqiang.asyncokhttp.sample;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.ImageView;
 
 import com.liuguangqiang.asyncokhttp.AsyncOkHttp;
 import com.liuguangqiang.asyncokhttp.RequestParams;
 import com.liuguangqiang.asyncokhttp.BaseResponseHandler;
 import com.liuguangqiang.asyncokhttp.JsonResponseHandler;
 import com.liuguangqiang.asyncokhttp.sample.entity.TestEntity;
+import com.squareup.picasso.Picasso;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -27,6 +29,8 @@ public class MainActivity extends AppCompatActivity {
         AsyncOkHttp.getInstance().addHeader("Header2", "123");
         get();
         put();
+
+        Picasso.with(this).load("").into(new ImageView(this));
     }
 
     public void get() {
