@@ -48,8 +48,6 @@ public class AsyncOkHttp {
     private AsyncOkHttp() {
         mHttpClient = new OkHttpClient();
         init(Configuration.createDefault());
-
-        mHttpClient.setSslSocketFactory(null);
     }
 
     public static AsyncOkHttp getInstance() {
@@ -73,7 +71,6 @@ public class AsyncOkHttp {
                     "AsyncOkHttp can not be initialized with null");
 
         mConfiguration = configuration;
-
         mThreadPool = mConfiguration.getThreadPool();
         mHeadersBuilder = mConfiguration.getHeadersBuilder();
         mHttpClient.setConnectTimeout(mConfiguration.getConnectTimeout(), TimeUnit.SECONDS);
@@ -102,6 +99,10 @@ public class AsyncOkHttp {
      */
     public void setSslSocketFactory(SSLSocketFactory sslSocketFactory) {
         mHttpClient.setSslSocketFactory(sslSocketFactory);
+    }
+
+    public void setAuthorization(String authorization) {
+        mHeadersBuilder.add("Authorization", authorization);
     }
 
     /**

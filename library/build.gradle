@@ -2,8 +2,8 @@ apply plugin: 'com.android.library'
 apply from: '../gradle-mvn-push.gradle'
 
 android {
-    compileSdkVersion 22
-    buildToolsVersion "22.0.1"
+    compileSdkVersion 23
+    buildToolsVersion "23.0.1"
 
     lintOptions {
         abortOnError false
@@ -25,8 +25,7 @@ android {
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
-    compile 'com.android.support:appcompat-v7:22.2.0'
-    compile 'com.squareup.okhttp:okhttp:2.0.0'
+    compile 'com.squareup.okhttp:okhttp:2.7.0'
     compile 'com.bluelinelabs:logansquare:1.1.0'
     compile 'com.google.code.gson:gson:2.2.4'
 }
