@@ -25,6 +25,7 @@ import com.squareup.okhttp.RequestBody;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.TimeUnit;
 
+import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.SSLSocketFactory;
 
 /**
@@ -81,6 +82,16 @@ public class AsyncOkHttp {
 
     public Configuration getConfiguration() {
         return mConfiguration;
+    }
+
+    /**
+     * Sets the verifier used to confirm that response certificates apply to
+     * requested hostnames for HTTPS connections.
+     * <p/>
+     * <p>If unset, a default hostname verifier will be used.
+     */
+    public void setHostnameVerifier(HostnameVerifier hostnameVerifier) {
+        mHttpClient.setHostnameVerifier(hostnameVerifier);
     }
 
     /**
