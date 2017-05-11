@@ -3,14 +3,10 @@ package com.liuguangqiang.asyncokhttp.sample;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
-import android.widget.ImageView;
 
 import com.liuguangqiang.asyncokhttp.AsyncOkHttp;
-import com.liuguangqiang.asyncokhttp.RequestParams;
-import com.liuguangqiang.asyncokhttp.BaseResponseHandler;
 import com.liuguangqiang.asyncokhttp.JsonResponseHandler;
 import com.liuguangqiang.asyncokhttp.sample.entity.TestEntity;
-import com.squareup.picasso.Picasso;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -28,9 +24,6 @@ public class MainActivity extends AppCompatActivity {
         AsyncOkHttp.getInstance().addHeader("Header1", "abc");
         AsyncOkHttp.getInstance().addHeader("Header2", "123");
         get();
-        put();
-
-        Picasso.with(this).load("").into(new ImageView(this));
     }
 
     public void get() {
@@ -47,27 +40,6 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(int code, String responseString) {
-                Log.i(TAG, "onFailure:" + responseString);
-            }
-        });
-    }
-
-    public void put() {
-        String url = "http://staging.api.fishsaying.com/authenticates.json";
-        RequestParams params = new RequestParams();
-        params.put("authorize", "eric");
-        params.put("password", "yushuo@2013");
-
-        AsyncOkHttp.getInstance().put(url, params, new BaseResponseHandler() {
-            @Override
-            public void onSuccess(int code, String responseString) {
-                Log.i(TAG, "onSuccess-code:" + code);
-                Log.i(TAG, "onSuccess:" + responseString);
-            }
-
-            @Override
-            public void onFailure(int code, String responseString) {
-                Log.i(TAG, "onFailure-code:" + code);
                 Log.i(TAG, "onFailure:" + responseString);
             }
         });
